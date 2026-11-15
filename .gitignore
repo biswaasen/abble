@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.vercel
+.env
+.env*.local
+.DS_Store
+npm-debug.log*
+
+# local copy of the Apps Script with the real secret
+apps-script/*.local.gs
