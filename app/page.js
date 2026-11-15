@@ -1,162 +1,93 @@
-import Hero3D from '@/components/Hero3D';
-import EarlyForm from '@/components/EarlyForm';
+import Device3D from '@/components/Device3D';
+import Nav from '@/components/Nav';
+import Footer from '@/components/Footer';
 import Reveal from '@/components/Reveal';
+import HowItWorks from '@/components/HowItWorks';
+import EarlyButton, { Launch } from '@/components/EarlyButton';
+import { LAUNCH_YEAR } from '@/lib/launch';
+
+const FAQ = [
+  ['What is abble 1?', 'A glass screen for your AI coding agents, about the size of an SD card. When one needs a decision, abble 1 shows you the question. Tap or speak your answer, and the agent gets back to work.'],
+  ['When does it launch?', `abble 1 launches in ${LAUNCH_YEAR}. Early access members hear first.`],
+  ['What does early access cost?', 'Nothing. Tell us how you work with agents and we will keep you posted.'],
+  ['Which agents will it work with?', 'We are designing around Claude Code, Codex, Cursor and Gemini CLI. These are planned integrations, not finished ones.'],
+  ['Do I have to wear it?', 'No. Keep it in a pocket, or snap it onto the optional woven strap.'],
+  ['Are these photos of the real device?', 'Not yet. The images show a design concept. Size, display and strap may change before production.'],
+];
 
 export default function Home() {
   return (
     <>
       <Reveal />
-      <header className="nav">
-        <nav className="navin" aria-label="Main">
-          <a className="brand" href="#top">abble</a>
-          <div className="navlinks">
-            <a href="#question">How it works</a>
-            <a href="#design">Design</a>
-            <a href="#agents">Agents</a>
-          </div>
-          <a className="pills" href="#shape">Get early access</a>
-        </nav>
-      </header>
+      <Nav />
 
       <main>
-        {/* 1 · hero */}
-        <section id="top" className="center" style={{ padding: 'clamp(48px, 6vw, 88px) 24px 0' }}>
-          <div className="wrap" style={{ maxWidth: 1200 }}>
-            <h1 className="h1">Your agents.<br /><span className="tail">Within reach.</span></h1>
-            <p className="lead">A quiet screen. One clear decision. A little more freedom to step away.</p>
-            <div className="cta">
-              <a className="pill" href="#shape">Help shape abble</a>
-              <a className="link" href="#question">See how it works ›</a>
-            </div>
-            <Hero3D />
-          </div>
+        {/* hero */}
+        <section id="top" className="hero">
+          <p className="product">abble 1</p>
+          <h1 className="hero-title">The ultimate interface<br />for the agentic era.</h1>
+          <Device3D autoplay fit={0.96} className="hero-stage" />
         </section>
 
-        {/* 2 · decide */}
-        <section id="question" className="sec">
-          <div className="wrap two">
-            <div className="colt">
-              <p className="eyebrow">Decide</p>
-              <h2 className="hsuper hside">One question. <span className="tail">Back to your day.</span></h2>
-              <p className="leadl">When an agent gets stuck, abble shows the one thing it needs from you. One line of context. Two clear answers.</p>
-            </div>
-            <div className="coli">
-              <img className="ph rv" src="/img/04-upright-question.webp" width={1100} height={1375} loading="lazy" alt="abble held between two fingers, asking: Postgres or SQLite?" />
-            </div>
-          </div>
+        {/* how it works, then the hardware: one pinned 3D abble 1 driven by scroll */}
+        <section id="how" className="sec">
+          <h2 className="h2 center">Ask. Answer. Back to work.</h2>
+          <HowItWorks />
         </section>
 
-        {/* 3 · carry */}
-        <section className="sec">
-          <div className="wrap two rev">
-            <div className="colt">
-              <p className="eyebrow">Carry</p>
-              <h2 className="hsuper hside">A little more <span className="tail">freedom.</span></h2>
-              <p className="leadl">Small enough to forget it is there. Make tea. Take the call. Step away from the desk. Your agents keep working, and abble tells you when one needs you.</p>
-            </div>
-            <div className="coli">
-              <img className="ph rv" src="/img/05-upright-palm.webp" width={1100} height={1375} loading="lazy" alt="abble resting in an open palm, showing how small it is" />
-            </div>
-          </div>
-        </section>
-
-        {/* 4 · talk */}
-        <section className="sec center">
+        {/* size */}
+        <section id="size" className="sec">
           <div className="wrap">
-            <p className="eyebrow">Talk</p>
-            <h2 className="hsuper">Say what <span className="tail">comes next.</span></h2>
-            <p className="lead">Hold the glass and speak. Let go to send. Your words go to the agent you chose.</p>
-            <img className="ph rv mt" src="/img/08-voice.webp" width={1536} height={1024} loading="lazy" alt="Someone speaking to abble on their wrist while it shows Listening" />
-          </div>
-        </section>
-
-        {/* 5 · smart steps */}
-        <section id="steps" className="sec center">
-          <div className="wrap">
-            <p className="eyebrow">Smart steps</p>
-            <h2 className="hsuper">Big questions. <span className="tail">Small steps.</span></h2>
-            <p className="lead">A long question from your agent becomes a few short ones. Tap an answer, review, and send.</p>
-            <div className="g3 mt">
-              <figure className="fig rv">
-                <img className="scr" src="/img/screen-steps.webp" width={1100} height={811} loading="lazy" alt="Screen: Where should it run? Atlas Cloud or Locally" />
-                <figcaption className="fc">One short question <span>With an answer suggested for you.</span></figcaption>
-              </figure>
-              <figure className="fig rv">
-                <img className="scr" src="/img/screen-review.webp" width={1100} height={811} loading="lazy" alt="Screen: Ready to send. Atlas, Mumbai, app-dev" />
-                <figcaption className="fc">Review <span>Every answer on one screen.</span></figcaption>
-              </figure>
-              <figure className="fig rv">
-                <img className="scr" src="/img/screen-sent.webp" width={1100} height={811} loading="lazy" alt="Screen: Back to work. Claude Code received your answer." />
-                <figcaption className="fc">Back to work <span>Shown once your agent has it.</span></figcaption>
-              </figure>
+            <h2 className="h2 center">About the size of an SD card.</h2>
+            <div className="trio">
+              <img className="rv" src="/img/06-upright-grip.webp" width={1122} height={1402} loading="lazy" alt="abble 1 held between thumb and fingers, showing the time and four agents" />
+              <img className="rv" src="/img/04-upright-question.webp" width={1122} height={1402} loading="lazy" alt="abble 1 pinched between two fingers, asking: Postgres or SQLite?" />
+              <img className="rv" src="/img/05-upright-palm.webp" width={1122} height={1402} loading="lazy" alt="abble 1 resting in an open palm" />
             </div>
           </div>
         </section>
 
-        {/* 6 · strap */}
-        <section className="sec center">
-          <div className="wrap">
-            <p className="eyebrow">Strap</p>
-            <h2 className="hsuper">Snap on. <span className="tail">Carry on.</span></h2>
-            <p className="lead">Keep abble in a pocket, or snap it onto the optional woven strap. A magnet holds it in place.</p>
-            <div className="g2 mt">
-              <img className="ph rv" src="/img/07-wrist.webp" width={1400} height={933} loading="lazy" alt="abble worn on a black woven strap" />
-              <img className="ph rv" src="/img/10-strap.webp" width={1400} height={933} loading="lazy" alt="abble lifting off the strap's magnetic cradle" />
+        {/* wear */}
+        <section id="wear" className="sec">
+          <div className="wrap center">
+            <h2 className="h2">Pocket it. Or snap it on.</h2>
+          </div>
+          <img className="wide rv" src="/img/07-wrist.webp" width={1536} height={1024} loading="lazy" alt="abble 1 worn on a black woven strap" />
+        </section>
+
+        {/* faq */}
+        <section id="faq" className="sec">
+          <div className="wrap-narrow">
+            <h2 className="h2 center">Questions.</h2>
+            <div className="faq">
+              {FAQ.map(([q, a]) => (
+                <details key={q}>
+                  <summary>{q}</summary>
+                  <p>{a}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* 7 · design (the one dark section) */}
-        <section id="design" className="dark center">
-          <div className="wrap">
-            <p className="eyebrow">Design</p>
-            <h2 className="hsuper">Every edge, <span className="tail">considered.</span></h2>
-            <p className="lead">One block of space gray aluminium. One sheet of glass. Nothing to press.</p>
-            <img className="ph rv mt" src="/img/09-macro.webp" width={1536} height={1024} loading="lazy" alt="Close-up of abble's glass meeting its aluminium edge" />
-            <dl className="spx">
-              <div><dt>38 × 28 × 5 mm</dt><dd>Smaller than a matchbox</dd></div>
-              <div><dt>Aluminium</dt><dd>Space gray, one piece</dd></div>
-              <div><dt>Glass</dt><dd>One continuous front</dd></div>
-              <div><dt>USB-C</dt><dd>No buttons</dd></div>
-            </dl>
+        {/* final call */}
+        <section id="final" className="sec final">
+          <div className="wrap center">
+            <h2 className="h2">Be one of the first 100.</h2>
+            <Launch />
+            <EarlyButton size="lg" />
           </div>
-        </section>
-
-        {/* 8 · agents */}
-        <section id="agents" className="sec center">
-          <div className="wrap">
-            <p className="eyebrow">Planned integrations</p>
-            <h2 className="hsuper">The agents <span className="tail">you already use.</span></h2>
-            <ul className="icons">
-              <li><img src="/brand/claude.png" width={88} height={88} alt="" />Claude Code</li>
-              <li><img src="/brand/codex.png" width={88} height={88} alt="" />Codex</li>
-              <li><img src="/brand/cursor.png" width={88} height={88} alt="" />Cursor</li>
-              <li><img src="/brand/gemini-cli.png" width={88} height={88} alt="" />Gemini CLI</li>
-            </ul>
-            <img className="scr rv" src="/img/screen-idle.webp" width={1100} height={811} loading="lazy" alt="abble idle screen: 9:41, All clear, 3 working, four agents" style={{ maxWidth: 620, margin: 'clamp(40px, 5vw, 64px) auto 0' }} />
-          </div>
-        </section>
-
-        {/* 9 · help shape abble */}
-        <section id="shape" className="sec">
-          <div className="wrap two" style={{ alignItems: 'flex-start', gap: 'clamp(32px, 6vw, 88px)' }}>
-            <div className="colt" style={{ flex: '1 1 360px' }}>
-              <h2 className="hsuper" style={{ fontSize: 'clamp(40px, 5vw, 68px)' }}>Help shape abble.</h2>
-              <p className="leadl">We are finishing the design with a small group of early builders. Tell us how you work with agents. We may call you.</p>
+          <div id="belief" className="final-photo">
+            <div className="final-belief">
+              <h2 className="h2">Design first.<br />Engineering follows.</h2>
+              <a className="btn-text belief-link" href="/story">Read our story <span aria-hidden="true">→</span></a>
             </div>
-            <div style={{ flex: '1.2 1 480px', minWidth: 0 }}>
-              <EarlyForm />
-            </div>
+            <img className="final-img" src="/img/03-hero.webp" width={1536} height={1024} loading="lazy" alt="abble 1 on a white surface, showing the time and four coding agents" />
           </div>
         </section>
       </main>
 
-      <footer className="foot">
-        <div className="wrap" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <p className="fine">Images show a design concept. Size, display and strap may change before production. Agent names and icons belong to their owners and are shown as planned integrations.</p>
-          <div className="row"><span className="brand" style={{ fontSize: 20 }}>abble</span><span className="fine">© 2026 abble</span></div>
-        </div>
-      </footer>
+      <Footer tint />
     </>
   );
 }

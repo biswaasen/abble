@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-/* The real abble, in 3D: 38 x 28 x 5 mm space gray tile, 3 mm corners, one sheet of black glass.
+/* abble 1 in 3D: 38 x 28 x 5 mm space gray tile, 3 mm corners, one sheet of black glass.
    The screen plays the six interface masters. Drag to turn it. */
 const STATES = [
   { k: 'idle', label: 'Idle', ms: 4200 },
@@ -140,31 +140,36 @@ function buildDevice(R) {
   return { scene, pivot, sc, tex, drawWordmark, envTex };
 }
 
-export default function Hero3D() {
+const FRONT = { ry: -0.5, rx: 0.1, idx: 0 };
+export const SCREEN = Object.fromEntries(STATES.map((s, i) => [s.k, i]));
+
+/* autoplay: cycle the screens on its own and let people drag it.
+   drive: a ref whose { ry, rx, idx } set the turn and the screen every frame (no dragging).
+   fit < 1 frames the device larger; sway scales the idle drift. */
+export default function Device3D({ autoplay = false, drive = null, fit = 1, sway = 1, className = '' }) {
   const stageRef = useRef(null);
   const ctl = useRef({ idx: 0, changedAt: 0, prev: 0 });
-  const [idx, setIdx] = useState(0);
-  const [auto, setAuto] = useState(true);
+  const opts = useRef({ fit, sway, drive });
+  const [autoIdx, setAutoIdx] = useState(0);
   const [ready, setReady] = useState(false);
   const [fallback, setFallback] = useState(false);
 
-  /* auto-play the screens until someone picks one */
   useEffect(() => {
-    if (!auto) return;
-    const t = setTimeout(() => setIdx((i) => (i + 1) % STATES.length), STATES[idx].ms);
+    if (!autoplay) return;
+    const t = setTimeout(() => setAutoIdx((i) => (i + 1) % STATES.length), STATES[autoIdx].ms);
     return () => clearTimeout(t);
-  }, [idx, auto]);
+  }, [autoIdx, autoplay]);
 
   useEffect(() => {
     const c = ctl.current;
-    if (c.idx !== idx) { c.prev = c.idx; c.idx = idx; c.changedAt = performance.now(); }
-  }, [idx]);
+    if (autoplay && c.idx !== autoIdx) { c.prev = c.idx; c.idx = autoIdx; c.changedAt = performance.now(); }
+  }, [autoIdx, autoplay]);
 
   useEffect(() => {
     const stage = stageRef.current;
     if (!stage) return;
     const probe = document.createElement('canvas');
-    if (!(probe.getContext('webgl') || probe.getContext('experimental-webgl'))) { setFallback(true); return; } /* show the photo instead */
+    if (!(probe.getContext('webgl') || probe.getContext('experimental-webgl'))) { setFallback(true); return; }
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let R;
@@ -177,7 +182,7 @@ export default function Hero3D() {
     R.toneMappingExposure = 1.12;
     R.setClearColor(0, 0);
     R.domElement.setAttribute('aria-hidden', 'true');
-    Object.assign(R.domElement.style, { position: 'absolute', inset: '0', width: '100%', height: '100%' }); /* never let the canvas size the hero */
+    Object.assign(R.domElement.style, { position: 'absolute', inset: '0', width: '100%', height: '100%' }); /* never let the canvas size its box */
     stage.appendChild(R.domElement);
 
     const cam = new THREE.PerspectiveCamera(24, 1, 0.3, 200);
@@ -215,51 +220,57 @@ export default function Hero3D() {
     });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawWordmark).catch(() => {});
 
-    /* drag to turn, otherwise a slow sway */
+    /* drag to turn, unless something else is driving it */
+    const driven = opts.current.drive;
     let uy = 0, ux = 0, drag = false, lx = 0, ly = 0, t = 0;
     const down = (e) => { drag = true; lx = e.clientX; ly = e.clientY; stage.style.cursor = 'grabbing'; };
     const move = (e) => {
       if (!drag) return;
-      uy += (e.clientX - lx) * 0.01; ux = Math.max(-0.6, Math.min(0.8, ux + (e.clientY - ly) * 0.006));
+      uy += (e.clientX - lx) * 0.01; ux = Math.max(-0.8, Math.min(0.8, ux + (e.clientY - ly) * 0.006));
       lx = e.clientX; ly = e.clientY;
     };
     const up = () => { drag = false; stage.style.cursor = ''; };
-    stage.addEventListener('pointerdown', down);
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
+    if (!driven) {
+      stage.addEventListener('pointerdown', down);
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      window.addEventListener('pointercancel', up);
+    }
 
     let baseD = 6;
     const size = () => {
       const w = stage.clientWidth, h = stage.clientHeight;
       if (!w || !h) return;
       R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
-      const needH = (H / 2) / Math.tan(FV) * 1.42, needW = (W / 2) / (Math.tan(FV) * cam.aspect) * 1.36;
+      const f = opts.current.fit;
+      const needH = (H / 2) / Math.tan(FV) * 1.42 * f, needW = (W / 2) / (Math.tan(FV) * cam.aspect) * 1.36 * f;
       baseD = Math.max(needH, needW);
     };
     const ro = new ResizeObserver(size); ro.observe(stage); size();
 
-    /* only render while the hero is on screen */
     let visible = true;
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { rootMargin: '100px' });
     io.observe(stage);
 
-    pivot.rotation.y = reduce ? -0.5 : -1.35;
-    pivot.rotation.x = 0.1;
+    const pose = () => (driven ? driven.current : FRONT);
+    pivot.rotation.y = reduce || driven ? pose().ry : pose().ry - 0.85;
+    pivot.rotation.x = pose().rx;
     const clock = new THREE.Clock();
     let raf = 0, shown = false;
     const loop = () => {
       raf = requestAnimationFrame(loop);
       const dt = Math.min(clock.getDelta(), 0.05);
-      if (!visible || document.hidden) return;
-      const now = performance.now();
+      if (!visible) return;
+      const P = pose(), sw = reduce ? 0 : opts.current.sway, c = ctl.current;
+      if (driven && P.idx !== c.idx) { c.prev = c.idx; c.idx = P.idx; c.changedAt = performance.now(); }
       if (!drag && !reduce) t += dt;
-      const ry = -0.5 + uy + (reduce ? 0 : Math.sin(t * 0.45) * 0.22);
-      const rx = 0.1 + ux + (reduce ? 0 : Math.sin(t * 0.31) * 0.03);
-      pivot.rotation.y += (ry - pivot.rotation.y) * Math.min(1, dt * (shown ? 6 : 2.2));
-      pivot.rotation.x += (rx - pivot.rotation.x) * Math.min(1, dt * 6);
+      const ry = P.ry + uy + Math.sin(t * 0.45) * 0.22 * sw;
+      const rx = P.rx + ux + Math.sin(t * 0.31) * 0.03 * sw;
+      const k = Math.min(1, dt * (driven ? 18 : shown ? 4.5 : 2.2)); /* driven input is already spring-smoothed upstream */
+      pivot.rotation.y += (ry - pivot.rotation.y) * k;
+      pivot.rotation.x += (rx - pivot.rotation.x) * k;
       cam.position.set(0, baseD * 0.1, baseD); cam.lookAt(0, -0.05, 0);
-      paint(now);
+      paint(performance.now());
       R.render(scene, cam);
       if (!shown && imgs.idle) { shown = true; setReady(true); }
     };
@@ -280,19 +291,9 @@ export default function Hero3D() {
     };
   }, []);
 
-  const pick = (i) => { setAuto(false); setIdx(i); };
-
   return (
-    <div>
-      <div ref={stageRef} className={`stage${ready ? ' ready' : ''}${fallback ? ' fallback' : ''}`}>
-        <img className="poster" src="/img/03-hero.webp" width={1536} height={1024} alt="abble, a matchbox-sized space gray device showing the time and four coding agents" loading="lazy" />
-      </div>
-      <div className="states" role="group" aria-label="Show a screen">
-        {STATES.map((s, i) => (
-          <button key={s.k} type="button" aria-pressed={i === idx} onClick={() => pick(i)}>{s.label}</button>
-        ))}
-      </div>
-      <p className="hint">Drag to turn it.</p>
+    <div ref={stageRef} className={`stage ${className}${ready ? ' ready' : ''}${fallback ? ' fallback' : ''}`}>
+      <img className="poster" src="/img/03-hero.webp" width={1536} height={1024} alt="abble 1, a small space gray device showing the time and four coding agents" />
     </div>
   );
 }
