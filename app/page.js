@@ -31,7 +31,7 @@ export default function Home() {
             <h2 className="h2">Pocket it. Or snap it on.</h2>
           </div>
           <div className="pair">
-            <img className="rv" src="/img/hand.webp" width={1122} height={1402} loading="lazy" alt="abble 1 held between thumb and fingers" />
+            <img className="rv" src="/img/hand.webp" width={1199} height={1312} loading="lazy" alt="abble 1 held between thumb and fingers" />
             <img className="rv" src="/img/wrist.webp" width={1535} height={1024} loading="lazy" alt="abble 1 worn on a black woven strap" />
           </div>
         </section>

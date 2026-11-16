@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Logo from '@/components/Logo';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const KEYS = 'ABCDEFGHIJ';
@@ -16,6 +17,13 @@ const STEPS = [
   { key: 'phone', type: 'tel', q: 'Best number to call?', placeholder: 'Phone number', autoComplete: 'tel', when: (a) => a.okToCall === 'Yes' },
 ];
 
+const Arrow = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h14" />
+    <path d="M13 6l6 6-6 6" />
+  </svg>
+);
+
 export default function FormPage() {
   const [answers, setAnswers] = useState({ agents: [] });
   const [i, setI] = useState(0);
@@ -29,6 +37,7 @@ export default function FormPage() {
   const value = answers[s.key] ?? (s.type === 'multi' ? [] : '');
   const isText = s.type === 'text' || s.type === 'email' || s.type === 'tel';
   const last = i === steps.length - 1;
+  const sending = state === 'sending';
 
   useEffect(() => {
     setError('');
@@ -61,6 +70,7 @@ export default function FormPage() {
       const j = await r.json().catch(() => ({}));
       if (!r.ok || !j.ok) throw new Error(j.error || 'Something went wrong. Please try again.');
       setState('done');
+      window.scrollTo(0, 0);
     } catch (err) {
       setError(err.message);
       setState('asking');
@@ -68,8 +78,9 @@ export default function FormPage() {
   }
 
   function next(a = answers) {
-    if (state === 'sending') return;
+    if (sending) return;
     const cur = a[s.key] ?? '';
+    if (s.type === 'choice' && !cur) return;
     if (s.type === 'email' && !EMAIL.test(String(cur).trim())) { setError('That email does not look right.'); return; }
     if (s.required && String(cur).trim() === '') return;
     const live = STEPS.filter((x) => !x.when || x.when(a));
@@ -78,6 +89,7 @@ export default function FormPage() {
   }
 
   function pick(opt) {
+    if (sending) return;
     if (s.type === 'multi') {
       set(value.includes(opt) ? value.filter((x) => x !== opt) : [...value, opt]);
       return;
@@ -102,16 +114,20 @@ export default function FormPage() {
   });
 
   if (state === 'done') {
+    const first = (answers.name || '').trim().split(' ')[0];
     return (
-      <div className="fp">
+      <div className="fp fp-done">
         <main className="fp-main">
           <div className="fp-step">
-            <a className="product fp-product" href="/">abble 1</a>
-            <h1 className="fp-q">You are on the list{answers.name ? `, ${answers.name.split(' ')[0]}` : ''}.</h1>
-            <p className="fp-help">Thank you for helping shape abble 1. {answers.okToCall === 'Yes' ? 'We will be in touch about a call.' : 'Early access news comes to your inbox first.'}</p>
-            <img className="fp-done-img" src="/img/hand.webp" width={1122} height={1402} alt="" />
+            <a className="fp-mark" href="/" aria-label="abble home"><Logo /></a>
+            <h1 className="fp-q">You’re on the list{first ? `, ${first}` : ''}.</h1>
+            <p className="fp-help">
+              {answers.okToCall === 'Yes' ? 'Thank you for helping shape abble 1. We will call you soon about the design.' : 'Thank you for helping shape abble 1. Early access news comes to your inbox first.'}
+            </p>
+            <a className="btn btn-lg fp-home" href="/">Back to home</a>
           </div>
         </main>
+        <img className="fp-done-img" src="/img/hero.webp" width={1536} height={1024} alt="abble 1 showing the time and four coding agents" />
       </div>
     );
   }
@@ -136,47 +152,47 @@ export default function FormPage() {
                 maxLength={200}
                 value={value}
                 onChange={(e) => { set(e.target.value); setError(''); }}
-                disabled={state === 'sending'}
+                readOnly={sending}
               />
               <span className="fp-label" aria-hidden="true">{s.placeholder}</span>
               <button
                 type="submit"
-                className={`fp-arrow${String(value).trim() ? ' on' : ''}`}
-                aria-label={last ? 'Join' : 'Continue'}
-                disabled={state === 'sending' || (s.required && String(value).trim() === '')}
+                className={`fp-arrow${String(value).trim() || sending ? ' on' : ''}`}
+                aria-label={sending ? 'Sending' : last ? 'Join' : 'Continue'}
+                disabled={sending || (s.required && String(value).trim() === '')}
               >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14" />
-                  <path d="M13 6l6 6-6 6" />
-                </svg>
+                {sending ? <span className="spin" aria-hidden="true" /> : <Arrow />}
               </button>
             </form>
           ) : (
             <div className="fp-opts" role="group" aria-label={s.q}>
-              {s.options.map((o, k) => (
-                <button
-                  key={o}
-                  type="button"
-                  className="fp-opt"
-                  aria-pressed={s.type === 'multi' ? value.includes(o) : value === o}
-                  onClick={() => pick(o)}
-                  aria-keyshortcuts={KEYS[k]}
-                >
-                  {o}
-                </button>
-              ))}
+              {s.options.map((o, k) => {
+                const on = s.type === 'multi' ? value.includes(o) : value === o;
+                return (
+                  <button
+                    key={o}
+                    type="button"
+                    className="fp-opt"
+                    aria-pressed={on}
+                    onClick={() => pick(o)}
+                    aria-keyshortcuts={KEYS[k]}
+                    disabled={sending}
+                  >
+                    {o}
+                    {sending && on ? <span className="spin" aria-hidden="true" /> : null}
+                  </button>
+                );
+              })}
             </div>
           )}
 
           {error ? <p className="fp-err" role="alert">{error}</p> : null}
 
           <div className="fp-foot">
-            {!isText && (s.type === 'multi' || last) ? (
-              <button type="button" className="btn btn-lg" onClick={() => next()} disabled={state === 'sending' || (last && !value)}>
-                {state === 'sending' ? 'Sending…' : last ? 'Join the first 100' : 'Continue'}
-              </button>
+            {s.type === 'multi' ? (
+              <button type="button" className="btn btn-lg" onClick={() => next()}>Continue</button>
             ) : null}
-            {i > 0 ? <button type="button" className="fp-prev" onClick={() => setI(i - 1)}>← Back</button> : null}
+            {i > 0 && !sending ? <button type="button" className="fp-prev" onClick={() => setI(i - 1)}>← Back</button> : null}
             <span className="fp-count">{i + 1} of {steps.length}</span>
           </div>
         </div>
