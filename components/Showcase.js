@@ -8,7 +8,7 @@ const STAGES = [
   { t: 'Your agents keep working.', screen: 'home', ry: -0.34, rx: 0.08 },
   { t: 'Until one needs you to choose.', screen: 'ask', ry: -0.12, rx: 0.05 },
   { t: 'You answer out loud.', screen: 'talk', ry: 0.16, rx: 0.07 },
-  { t: 'No phone. No tabs. No waiting.', screen: 'done', ry: -0.3, rx: 0.08 },
+  { t: 'Without picking up your phone.', screen: 'done', ry: -0.3, rx: 0.08 },
   { t: 'Made to be held.', screen: 'done', ry: Math.PI - 0.36, rx: 0.08 },
 ].map((s) => ({ ...s, idx: SCREENS.indexOf(s.screen) }));
 const N = STAGES.length;
