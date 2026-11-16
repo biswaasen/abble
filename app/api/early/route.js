@@ -1,7 +1,7 @@
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE = /^\+(91[6-9]\d{9}|1[2-9]\d{2}[2-9]\d{6})$/;
 const clip = (v, n = 200) => String(v ?? '').trim().slice(0, n);
 const json = (body, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
 
@@ -9,19 +9,14 @@ export async function POST(req) {
   let b;
   try { b = await req.json(); } catch { return json({ ok: false, error: 'Bad request.' }, 400); }
 
-  const email = clip(b.email, 200).toLowerCase();
-  if (!EMAIL.test(email)) return json({ ok: false, error: 'Please enter a valid email.' }, 400);
+  const phone = clip(b.phone, 20);
+  if (!PHONE.test(phone)) return json({ ok: false, error: 'Please enter a US or Indian phone number.' }, 400);
 
   const row = {
+    phone,
     name: clip(b.name, 120),
-    email,
-    phone: clip(b.phone, 40),
-    role: clip(b.role, 40),
     company: clip(b.company, 200),
-    agents: (Array.isArray(b.agents) ? b.agents : []).map((a) => clip(a, 40)).filter(Boolean).slice(0, 10),
-    hours: clip(b.hours, 40),
     away: clip(b.away, 40),
-    okToCall: b.okToCall === true,
     country: clip(req.headers.get('x-vercel-ip-country'), 8),
     page: clip(b.page, 300),
     browser: clip(req.headers.get('user-agent'), 300),
