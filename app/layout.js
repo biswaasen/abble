@@ -1,8 +1,7 @@
-import '@fontsource-variable/google-sans-flex';
 import './globals.css';
 
 const title = 'Abble 1';
-const description = 'Abble 1 is a glass screen for your AI coding agents, about the size of an SD card. One question, one answer, back to your day. Launch price $129 for early members. Launching in 2027.';
+const description = 'Abble 1. The interface for personal computing. Launching in 2027 at $149. Join the waitlist.';
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://abble.si'),
@@ -17,6 +16,11 @@ export const viewport = { themeColor: '#ffffff' };
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="" />
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" />
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -1,12 +1,11 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { drawScreen, AGENT_KEYS } from '@/components/screens';
 import { LOGO_PATH } from '@/components/Logo';
+// Screen images live in public/screens (2048 × 1500 renders of the device screens), in story order.
+export const SCREENS = ['home', 'ask', 'talk', 'done'];
 
-const STATES = [{ k: 'idle' }, { k: 'ask' }, { k: 'talk', live: true }, { k: 'sent' }];
-
-const W = 3.8, H = 2.8, D = 0.5, RAD = 0.3, RB = 0.05, GB = 0.05, INS = 0.035;
+const W = 3.8, H = 2.8, D = 0.4, RAD = 0.3, RB = 0.05, GB = 0.05, INS = 0.035;
 const ZG = D / 2 - 0.06;
 const DW = W - 2 * INS, DH = H - 2 * INS;
 const FV = (24 * Math.PI) / 360;
@@ -26,7 +25,15 @@ function buildDevice(R) {
   };
   panel(14, 14, 0, 13, 2, 4); panel(3, 18, -12, 2, 4, 6); panel(3, 18, 12, 2, -2, 5); panel(18, 4, 0, -4, 13, 1.6);
   panel(10, 10, 0, 4, -13, 1.2); panel(2, 10, -6, 0, 11, 1.8); panel(2, 10, 9, 1, 7, 2.4); panel(20, 1.2, 0, 7, 9, 3.2);
+  const sbc = document.createElement('canvas'); sbc.width = sbc.height = 256;
+  const sbx = sbc.getContext('2d'), sbg = sbx.createRadialGradient(128, 128, 0, 128, 128, 128);
+  sbg.addColorStop(0, '#fff'); sbg.addColorStop(0.55, '#777'); sbg.addColorStop(1, '#000');
+  sbx.fillStyle = sbg; sbx.fillRect(0, 0, 256, 256);
+  const softbox = new THREE.Mesh(new THREE.PlaneGeometry(16, 11), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sbc), color: new THREE.Color(1, 1, 1).multiplyScalar(0.9), side: THREE.DoubleSide }));
+  softbox.position.set(-5, 6, 12); softbox.lookAt(0, 0, 0);
   const envTex = pm.fromScene(env, 0.03).texture;
+  env.add(softbox);
+  const glassEnv = pm.fromScene(env, 0.03).texture;
   scene.environment = envTex;
   pm.dispose();
 
@@ -37,7 +44,7 @@ function buildDevice(R) {
   const grain = new THREE.CanvasTexture(gc); grain.wrapS = grain.wrapT = THREE.RepeatWrapping; grain.repeat.set(3, 3);
 
   const alu = new THREE.MeshPhysicalMaterial({ color: 0x5a5c61, metalness: 1, roughness: 0.4, roughnessMap: grain, bumpMap: grain, bumpScale: 0.0006 });
-  const glass = new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0.06, reflectivity: 0.3, envMapIntensity: 0.38 });
+  const glass = new THREE.MeshPhysicalMaterial({ color: 0x000000, metalness: 0, roughness: 0.05, reflectivity: 0.4, envMap: glassEnv, envMapIntensity: 0.8 });
   const antM = new THREE.MeshStandardMaterial({ color: 0x2e2f32, roughness: 0.7, metalness: 0.1 });
   const wellM = new THREE.MeshStandardMaterial({ color: 0x0a0a0b, roughness: 0.85, side: THREE.DoubleSide });
 
@@ -87,12 +94,15 @@ function buildDevice(R) {
   const mic = M(new THREE.CircleGeometry(0.022, 24), wellM, -1.05, H / 2 + 0.002, sideZ, dev); mic.rotation.x = -Math.PI / 2;
 
   const aniso = R.capabilities.getMaxAnisotropy();
-  const sc = document.createElement('canvas'); sc.width = 2048; sc.height = Math.round(2048 * DH / DW);
-  const tex = new THREE.CanvasTexture(sc); tex.encoding = THREE.sRGBEncoding; tex.anisotropy = aniso;
-  M(new THREE.PlaneGeometry(DW, DH), new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), 0, 0, D / 2 + 0.0012, dev);
+  // Two stacked screen planes: `base` holds the current screen, `top` fades the next one in over it.
+  const screenGeo = new THREE.PlaneGeometry(DW, DH);
+  const screenMat = () => new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const base = M(screenGeo, screenMat(), 0, 0, D / 2 + 0.0012, dev);
+  const top = M(screenGeo, screenMat(), 0, 0, D / 2 + 0.0016, dev);
+  base.renderOrder = 1; top.renderOrder = 2; base.visible = top.visible = false;
   const glc = document.createElement('canvas'); glc.width = 512; glc.height = 384;
   const glx = glc.getContext('2d'); const gg = glx.createLinearGradient(0, 0, 512, 384);
-  gg.addColorStop(0, 'rgba(255,255,255,0.07)'); gg.addColorStop(0.3, 'rgba(255,255,255,0.015)'); gg.addColorStop(0.5, 'rgba(255,255,255,0)');
+  gg.addColorStop(0, 'rgba(255,255,255,0.07)'); gg.addColorStop(0.28, 'rgba(255,255,255,0.02)'); gg.addColorStop(0.55, 'rgba(255,255,255,0)');
   glx.fillStyle = gg; glx.fillRect(0, 0, 512, 384);
   const glt = new THREE.CanvasTexture(glc); glt.encoding = THREE.sRGBEncoding;
   M(new THREE.PlaneGeometry(W - 2 * GB, H - 2 * GB), new THREE.MeshBasicMaterial({ map: glt, transparent: true, depthWrite: false, toneMapped: false }), 0, 0, D / 2 + 0.0025, dev);
@@ -103,26 +113,24 @@ function buildDevice(R) {
   wx.setTransform(ms, 0, 0, ms, 512 - 50 * ms, 256 - 50 * ms);
   wx.fill(new Path2D(LOGO_PATH));
   const wt = new THREE.CanvasTexture(wc); wt.encoding = THREE.sRGBEncoding; wt.anisotropy = aniso;
-  const wm = M(new THREE.PlaneGeometry(2.0, 1.0), new THREE.MeshBasicMaterial({ map: wt, transparent: true, toneMapped: false, depthWrite: false }), 0, 0, -D / 2 - 0.0015, dev);
+  const wm = M(new THREE.PlaneGeometry(1.7, 0.85), new THREE.MeshBasicMaterial({ map: wt, transparent: true, toneMapped: false, depthWrite: false }), 0, 0, -D / 2 - 0.0015, dev);
   wm.rotation.y = Math.PI;
 
   const stadium = (w, h) => rshape(w, h, h / 2);
-  const ringShape = stadium(0.93, 0.36); ringShape.holes.push(stadium(0.894, 0.326));
+  const ringShape = stadium(0.744, 0.26); ringShape.holes.push(stadium(0.71, 0.226));
   const ur = M(new THREE.ShapeGeometry(ringShape, 16), new THREE.MeshPhysicalMaterial({ color: 0x8d8f94, metalness: 1, roughness: 0.12 }), 0, -H / 2 - 0.0016, sideZ, dev); ur.rotation.x = Math.PI / 2;
-  const uw = M(new THREE.ShapeGeometry(stadium(0.894, 0.326), 16), new THREE.MeshStandardMaterial({ color: 0x030303, roughness: 0.9 }), 0, -H / 2 - 0.0014, sideZ, dev); uw.rotation.x = Math.PI / 2;
-  const ut = M(new THREE.ShapeGeometry(rshape(0.66, 0.07, 0.02), 4), new THREE.MeshStandardMaterial({ color: 0x232325, roughness: 0.6 }), 0, -H / 2 - 0.0018, sideZ, dev); ut.rotation.x = Math.PI / 2;
+  const uw = M(new THREE.ShapeGeometry(stadium(0.71, 0.226), 16), new THREE.MeshStandardMaterial({ color: 0x030303, roughness: 0.9 }), 0, -H / 2 - 0.0014, sideZ, dev); uw.rotation.x = Math.PI / 2;
+  const ut = M(new THREE.ShapeGeometry(rshape(0.53, 0.056, 0.016), 4), new THREE.MeshStandardMaterial({ color: 0x232325, roughness: 0.6 }), 0, -H / 2 - 0.0018, sideZ, dev); ut.rotation.x = Math.PI / 2;
 
   const shc = document.createElement('canvas'); shc.width = shc.height = 256;
   const sx = shc.getContext('2d'); const gr = sx.createRadialGradient(128, 128, 0, 128, 128, 128);
   gr.addColorStop(0, 'rgba(0,0,0,0.30)'); gr.addColorStop(0.5, 'rgba(0,0,0,0.10)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
   sx.fillStyle = gr; sx.fillRect(0, 0, 256, 256);
   const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(shc), transparent: true, depthWrite: false, toneMapped: false }));
-  shadow.rotation.x = -Math.PI / 2; shadow.position.set(0, -H / 2 - 0.12, 0); shadow.scale.set(6.6, 1.8, 1); scene.add(shadow);
+  shadow.rotation.x = -Math.PI / 2; shadow.position.set(0, -H / 2 - 0.12, 0); shadow.scale.set(5.4, 1.6, 1); scene.add(shadow);
 
-  return { scene, pivot, sc, tex, envTex };
+  return { scene, pivot, envTex, glassEnv, base, top, aniso };
 }
-
-export const SCREEN = Object.fromEntries(STATES.map((s, i) => [s.k, i]));
 
 export default function Device3D({ drive, className = '' }) {
   const stageRef = useRef(null);
@@ -150,48 +158,30 @@ export default function Device3D({ drive, className = '' }) {
     stage.appendChild(R.domElement);
 
     const cam = new THREE.PerspectiveCamera((2 * Math.atan(K * Math.tan(FV)) * 180) / Math.PI, 1, 0.3, 200);
-    const { scene, pivot, sc, tex, envTex } = buildDevice(R);
+    const { scene, pivot, envTex, glassEnv, base, top, aniso } = buildDevice(R);
 
-    const icons = {};
-    const layers = {};
-    const sx = sc.getContext('2d');
-    const shown = { idx: drive.current.idx, prev: drive.current.idx, at: 0 };
-    let lastPaint = -1;
-    const renderLayer = (k, t = 0) => {
-      let cv = layers[k];
-      if (!cv) { cv = layers[k] = document.createElement('canvas'); cv.width = sc.width; cv.height = sc.height; }
-      drawScreen(cv.getContext('2d'), k, cv.width, cv.height, t, icons);
-    };
-    const renderAll = () => { STATES.forEach((s) => renderLayer(s.k)); lastPaint = -1; };
-    const rr = ((RAD - INS) / DW) * sc.width;
-    const clip = () => {
-      const w = sc.width, h = sc.height, r = rr;
-      sx.beginPath(); sx.moveTo(r, 0); sx.arcTo(w, 0, w, h, r); sx.arcTo(w, h, 0, h, r); sx.arcTo(0, h, 0, 0, r); sx.arcTo(0, 0, w, 0, r); sx.closePath();
-    };
-    const layer = (k, a) => {
-      if (!layers[k] || a <= 0) return;
-      sx.globalAlpha = a; sx.drawImage(layers[k], 0, 0); sx.globalAlpha = 1;
-    };
-    const paint = (now) => {
-      const k = Math.min(1, (now - shown.at) / 420);
-      const live = STATES[shown.idx].live || (k < 1 && STATES[shown.prev].live);
-      const key = shown.idx * 1000 + Math.round(k * 100) + (live ? Math.floor(now / 50) * 1e4 : 0);
-      if (key === lastPaint) return;
-      lastPaint = key;
-      if (live) renderLayer('talk', now / 1000);
-      sx.clearRect(0, 0, sc.width, sc.height); sx.save(); clip(); sx.clip();
-      sx.fillStyle = '#000'; sx.fillRect(0, 0, sc.width, sc.height);
-      if (k < 1) layer(STATES[shown.prev].k, 1);
-      layer(STATES[shown.idx].k, k < 1 ? k * k * (3 - 2 * k) : 1);
-      sx.restore(); tex.needsUpdate = true;
-    };
-    renderAll();
-    AGENT_KEYS.forEach((k) => {
-      const im = new Image(); im.decoding = 'async';
-      im.onload = () => { icons[k] = im; renderAll(); };
-      im.src = `/brand/${k}.png`;
+    // Screens go straight onto the GPU as textures: 4096-wide on large displays, 2048-wide on phones.
+    const hi = R.capabilities.maxTextureSize >= 4096 && window.innerWidth * Math.min(window.devicePixelRatio || 1, 2) >= 1600;
+    const shown = { idx: drive.current.idx || 0, prev: drive.current.idx || 0, at: 0 };
+    let alive = true, loaded = 0, painted = false;
+    const loader = new THREE.TextureLoader();
+    const done = () => { if (++loaded === SCREENS.length && alive) { painted = true; base.visible = true; } };
+    const texs = SCREENS.map((k) => {
+      const t = loader.load(`/screens/${hi ? '4k/' : ''}${k}.webp`, done, undefined, done);
+      t.encoding = THREE.sRGBEncoding; t.anisotropy = aniso;
+      return t;
     });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderAll).catch(() => {});
+    const setMap = (mesh, t) => { if (mesh.material.map !== t) { mesh.material.map = t; mesh.material.needsUpdate = true; } };
+    const paint = (now) => {
+      if (!painted) return;
+      const k = Math.min(1, (now - shown.at) / 480);
+      if (k < 1) {
+        setMap(base, texs[shown.prev]); setMap(top, texs[shown.idx]);
+        top.material.opacity = k * k * (3 - 2 * k); top.visible = true;
+      } else {
+        setMap(base, texs[shown.idx]); top.visible = false;
+      }
+    };
 
     let uy = 0, ux = 0, drag = false, lx = 0, ly = 0, t = 0, letGo = 0;
     const down = (e) => { drag = true; lx = e.clientX; ly = e.clientY; stage.style.cursor = 'grabbing'; };
@@ -234,7 +224,7 @@ export default function Device3D({ drive, className = '' }) {
       const dt = Math.min(clock.getDelta(), 0.05);
       if (!visible) return;
       const P = drive.current, sw = reduce ? 0 : P.sway || 0, now = performance.now();
-      if (P.idx !== shown.idx) { shown.prev = shown.idx; shown.idx = P.idx; shown.at = now; }
+      if ((P.idx || 0) !== shown.idx) { shown.prev = shown.idx; shown.idx = P.idx || 0; shown.at = now; }
       if (!drag && !reduce) t += dt;
       if (!drag && now - letGo > 1400) { const d = Math.exp(-dt * 2.4); uy *= d; ux *= d; }
       const ry = P.ry + uy + Math.sin(t * 0.45) * 0.22 * sw;
@@ -250,6 +240,7 @@ export default function Device3D({ drive, className = '' }) {
     loop();
 
     return () => {
+      alive = false;
       cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
       stage.removeEventListener('pointerdown', down);
       window.removeEventListener('pointermove', move);
@@ -259,14 +250,15 @@ export default function Device3D({ drive, className = '' }) {
         if (o.geometry) o.geometry.dispose();
         if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); }
       });
-      envTex.dispose(); R.dispose();
+      texs.forEach((t) => t.dispose());
+      envTex.dispose(); glassEnv.dispose(); R.dispose();
       if (R.domElement.parentNode) R.domElement.parentNode.removeChild(R.domElement);
     };
   }, [drive]);
 
   return (
     <div ref={stageRef} className={`stage ${className}${ready ? ' ready' : ''}${fallback ? ' fallback' : ''}`}>
-      <img className="poster" src="/img/hero.webp" width={1535} height={1024} alt="Abble 1, a small space gray device showing the time and four coding agents" />
+      <img className="poster" src="/img/abble-1.webp" width={1600} height={699} alt="Abble 1 asking whether to ship it today or tomorrow" />
     </div>
   );
 }

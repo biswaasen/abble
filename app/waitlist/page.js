@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Logo from '@/components/Logo';
-import { PRICE } from '@/lib/launch';
+import { LAUNCH_YEAR } from '@/lib/launch';
 
 const KEYS = 'ABCDEFGHIJ';
 
@@ -36,7 +36,7 @@ const Arrow = () => (
   </svg>
 );
 
-export default function FormPage() {
+export default function WaitlistPage() {
   const [answers, setAnswers] = useState({});
   const [cc, setCc] = useState('+91');
   const [i, setI] = useState(0);
@@ -131,11 +131,11 @@ export default function FormPage() {
           <div className="fp-step">
             <a className="fp-mark" href="/" aria-label="Abble home"><Logo /></a>
             <h1 className="fp-q">You’re in{first ? `, ${first}` : ''}.</h1>
-            <p className="fp-help">The {PRICE} launch price is yours. We’ll be in touch before Abble 1 ships.</p>
+            <p className="fp-help">You’re on the waitlist. We’ll be in touch before Abble 1 ships in {LAUNCH_YEAR}.</p>
             <a className="btn btn-lg fp-home" href="/">Back to home</a>
           </div>
         </main>
-        <img className="fp-done-img" src="/img/hero.webp" width={1535} height={1024} alt="Abble 1 showing the time and four coding agents" />
+        <img className="fp-done-img" src="/img/abble-1.webp" width={1600} height={700} alt="Abble 1 asking whether to ship it today or tomorrow" />
       </div>
     );
   }
@@ -147,7 +147,6 @@ export default function FormPage() {
           <a className="fp-brand" href="/" aria-label="Abble 1 home">
             <Logo />
             <span>Abble 1</span>
-            <span className="fp-price">{PRICE}</span>
           </a>
           <h1 className="fp-q"><label htmlFor={isText ? `f-${s.key}` : undefined}>{s.q}</label></h1>
 

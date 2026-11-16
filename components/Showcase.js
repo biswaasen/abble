@@ -1,17 +1,20 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import Device3D, { SCREEN } from '@/components/Device3D';
+import Device3D, { SCREENS } from '@/components/Device3D';
+import Logo from '@/components/Logo';
 
+const START = { ry: -Math.PI / 2 + 0.05, rx: 0 };
 const STAGES = [
-  { t: 'Your agents keep working.', screen: SCREEN.idle, ry: -0.35, rx: 0.08 },
-  { t: 'One of them needs you.', screen: SCREEN.ask, ry: -0.12, rx: 0.05 },
-  { t: 'Tap. Or just say it.', screen: SCREEN.talk, ry: 0.18, rx: 0.08 },
-  { t: 'Back to work.', screen: SCREEN.sent, ry: -0.3, rx: 0.1 },
-];
+  { t: 'Your agents keep working.', screen: 'home', ry: -0.34, rx: 0.08 },
+  { t: 'Until one needs you to choose.', screen: 'ask', ry: -0.12, rx: 0.05 },
+  { t: 'You answer out loud.', screen: 'talk', ry: 0.16, rx: 0.07 },
+  { t: 'No phone. No tabs. No waiting.', screen: 'done', ry: -0.3, rx: 0.08 },
+  { t: 'Made to be held.', screen: 'done', ry: Math.PI - 0.36, rx: 0.08 },
+].map((s) => ({ ...s, idx: SCREENS.indexOf(s.screen) }));
 const N = STAGES.length;
-const HOLD = 0.55;
+const HOLD = 0.5;
 const INTRO = 1 / (N + 1);
-const START_SCALE = 0.86;
+const START_SCALE = 0.7;
 
 const SMOOTH = 0.32;
 const MAX_SPEED = 2.4 / (N + 1);
@@ -30,13 +33,14 @@ function smoothDamp(cur, target, vel, dt) {
 }
 
 const ease = (t) => t * t * (3 - 2 * t);
+const mix = (a, b, s) => a + (b - a) * s;
 
 function storyAt(q) {
   const x = Math.min(N - 1, Math.max(0, q || 0) * N), i = Math.floor(x), f = x - i;
   const a = STAGES[i], b = STAGES[Math.min(N - 1, i + 1)];
   const s = ease(f <= HOLD ? 0 : (f - HOLD) / (1 - HOLD));
   const stage = Math.min(N - 1, Math.floor(x + (1 - HOLD) / 2));
-  return { ry: a.ry + (b.ry - a.ry) * s, rx: a.rx + (b.rx - a.rx) * s, stage };
+  return { ry: mix(a.ry, b.ry, s), rx: mix(a.rx, b.rx, s), stage };
 }
 
 export default function Showcase() {
@@ -44,14 +48,14 @@ export default function Showcase() {
   const stickRef = useRef(null);
   const textRef = useRef(null);
   const stageRef = useRef(null);
-  const drive = useRef({ ry: STAGES[0].ry, rx: STAGES[0].rx, idx: STAGES[0].screen, sway: 1 });
+  const drive = useRef({ ry: START.ry, rx: START.rx, idx: STAGES[0].idx, sway: 1 });
   const [stage, setStage] = useState(-1);
 
   useEffect(() => {
     const el = ref.current, stick = stickRef.current, text = textRef.current, box = stageRef.current;
     const target = () => {
-      const r = el.getBoundingClientRect(), travel = r.height - (window.innerHeight - 64);
-      return travel > 0 ? Math.min(1, Math.max(0, (64 - r.top) / travel)) : 0;
+      const r = el.getBoundingClientRect(), travel = r.height - window.innerHeight;
+      return travel > 0 ? Math.min(1, Math.max(0, -r.top / travel)) : 0;
     };
 
     let startY = 0;
@@ -68,10 +72,10 @@ export default function Showcase() {
       text.style.filter = e > 0.002 ? `blur(${(e * 14).toFixed(2)}px)` : 'none';
       text.style.transform = `translate3d(0, ${(-e * 48).toFixed(1)}px, 0)`;
       text.style.visibility = e > 0.995 ? 'hidden' : 'visible';
-      box.style.transform = `translate3d(0, ${((1 - e) * startY).toFixed(1)}px, 0) scale(${(START_SCALE + (1 - START_SCALE) * e).toFixed(4)})`;
+      box.style.transform = `translate3d(0, ${((1 - e) * startY).toFixed(1)}px, 0) scale(${mix(START_SCALE, 1, e).toFixed(4)})`;
 
       const st = storyAt((cur - INTRO) / (1 - INTRO));
-      drive.current = { ry: st.ry, rx: st.rx, idx: STAGES[st.stage].screen, sway: 1 - e };
+      drive.current = { ry: mix(START.ry, st.ry, e), rx: mix(START.rx, st.rx, e), idx: STAGES[st.stage].idx, sway: 1 - e };
       const visible = cur < INTRO * 0.97 ? -1 : st.stage;
       if (visible !== shown) { shown = visible; setStage(visible); }
     };
@@ -100,11 +104,10 @@ export default function Showcase() {
 
   return (
     <div className="look" ref={ref}>
-      <span id="how" className="look-anchor" style={{ '--at': INTRO }} aria-hidden="true" />
       <div className="look-stick" ref={stickRef}>
         <div className="show-text" ref={textRef}>
-          <p className="product">Abble 1</p>
-          <h1 className="hero-title">The ultimate interface<br />for the agentic era.</h1>
+          <p className="product"><Logo />Abble 1</p>
+          <h1 className="hero-title">The interface for<br />personal computing.</h1>
         </div>
         <div className="show-stage" ref={stageRef}>
           <Device3D className="look-stage" drive={drive} />
@@ -112,7 +115,7 @@ export default function Showcase() {
         <div className="look-caps">
           {STAGES.map((s, i) => (
             <div key={s.t} className={i === stage ? 'on' : undefined} aria-hidden={i !== stage}>
-              <h3>{s.t}</h3>
+              <h2>{s.t}</h2>
             </div>
           ))}
         </div>
