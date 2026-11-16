@@ -1,7 +1,6 @@
 const FONT = "'Helvetica Neue',Helvetica,-apple-system,BlinkMacSystemFont,Arial,sans-serif";
 const INK = '#1d1d1f';
 const GREY = '#6e6e73';
-const BLUE = '#0071e3';
 
 export const AGENT_KEYS = ['claude', 'codex', 'cursor', 'gemini-cli'];
 
@@ -119,7 +118,7 @@ function talk(ctx, W, H, t, icons) {
     const amp = b * (0.4 + 0.6 * Math.abs(Math.sin(t * 4.6 + i * 0.85)));
     const h = 26 + amp * 124;
     round(ctx, x, 300 - h / 2, bw, h, bw / 2);
-    ctx.fillStyle = BLUE;
+    ctx.fillStyle = INK;
     ctx.fill();
     x += bw + gap;
   });

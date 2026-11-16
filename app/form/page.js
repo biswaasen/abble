@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Logo from '@/components/Logo';
+import { PRICE } from '@/lib/launch';
 
 const KEYS = 'ABCDEFGHIJ';
 
@@ -129,8 +130,8 @@ export default function FormPage() {
         <main className="fp-main">
           <div className="fp-step">
             <a className="fp-mark" href="/" aria-label="Abble home"><Logo /></a>
-            <h1 className="fp-q">You’re on the list{first ? `, ${first}` : ''}.</h1>
-            <p className="fp-help">Thank you for helping shape Abble 1. We’ll be in touch soon.</p>
+            <h1 className="fp-q">You’re in{first ? `, ${first}` : ''}.</h1>
+            <p className="fp-help">Your Abble 1 is reserved at {PRICE}. Pay nothing today. We’ll be in touch before it ships.</p>
             <a className="btn btn-lg fp-home" href="/">Back to home</a>
           </div>
         </main>
@@ -143,7 +144,7 @@ export default function FormPage() {
     <div className="fp">
       <main className="fp-main">
         <div className="fp-step" key={s.key}>
-          <a className="product fp-product" href="/">Abble 1</a>
+          <a className="product fp-product" href="/">Pre-order Abble 1 · {PRICE}</a>
           <h1 className="fp-q"><label htmlFor={isText ? `f-${s.key}` : undefined}>{s.q}</label></h1>
 
           {isText ? (

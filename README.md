@@ -1,6 +1,6 @@
 # Abble
 
-Launch site for Abble 1. Next.js App Router on Vercel, with a scroll-driven 3D device and an early access form that writes to a Google Sheet.
+Launch site for Abble 1. Next.js App Router on Vercel, with a scroll-driven 3D device and a pre-order form that writes to a Google Sheet.
 
 ## Run
 
@@ -13,9 +13,9 @@ npm run dev
 
 ```
 app/
-  page.js            home: 3D showcase, wear, FAQ, early access
+  page.js            home: 3D showcase, wear, FAQ, pre-order
   story/page.js      our story
-  form/page.js       early access form, one question per screen
+  form/page.js       pre-order form, one question per screen
   api/early/route.js forwards sign-ups to the Google Sheet
   layout.js          metadata and font
   globals.css        all styles
@@ -23,8 +23,8 @@ components/
   Showcase.js        pinned hero and scroll story around the 3D device
   Device3D.js        three.js model of Abble 1
   screens.js         device screens drawn on canvas
-  Nav.js, Footer.js, EarlyButton.js, PhotoBand.js, Reveal.js
-lib/launch.js        launch year
+  Nav.js, Footer.js, PreorderButton.js, PhotoBand.js, Reveal.js
+lib/launch.js        launch year and price
 public/img/          hero, hand and wrist photos
 public/brand/        agent icons shown on the device screens
 apps-script/Code.gs  Google Apps Script that appends rows to the sheet
