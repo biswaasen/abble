@@ -3,7 +3,7 @@
   --grey: #6e6e73;
   --line: rgba(0, 0, 0, 0.08);
   --tile: #f5f5f7;
-  --photo: #f6f3f7;
+  --photo: #f4f3fb;
   --font: 'Google Sans Flex Variable', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
@@ -115,9 +115,12 @@ a { color: inherit; text-decoration: none; }
 .photo-band { margin: 0 -24px; background: linear-gradient(to bottom, #fff, var(--photo) clamp(120px, 14vw, 220px)); }
 .photo-band-copy { position: relative; z-index: 1; padding: clamp(120px, 14vw, 200px) 24px 0; text-align: center; }
 .photo-band-img {
-  width: 100%; max-width: 1600px; height: auto; margin: clamp(-210px, -11vw, -32px) auto 0;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 84%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 84%, transparent);
+  --gap: clamp(40px, 5.3vw, 76px);
+  width: 100%; max-width: 1100px; height: auto; margin: calc(var(--gap) - 0.145 * min(100vw, 1100px)) auto 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 84%, transparent), linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 84%, transparent), linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-composite: intersect;
 }
 
 .story-ch { padding: clamp(120px, 15vw, 220px) 24px 0; text-align: center; }
@@ -126,7 +129,7 @@ a { color: inherit; text-decoration: none; }
 .story-line + .story-line { margin-top: 0.32em; }
 .story-end { padding: 0 24px; }
 .story-end .photo-band-copy { padding-top: clamp(120px, 15vw, 220px); }
-.story-end .photo-band-img { margin-top: clamp(-170px, -10vw, -24px); }
+.story-end .photo-band-img { --gap: clamp(48px, 6.3vw, 90px); }
 
 .foot { padding: 32px 24px 56px; background: var(--photo); }
 .foot-links { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 20px; font-size: 14px; }
@@ -187,7 +190,6 @@ a { color: inherit; text-decoration: none; }
   .pair { grid-template-columns: 1fr; }
   .pair img { height: auto; }
   .btn-nav { font-size: 14px; padding: 10px 18px; }
-  .photo-band-img, .story-end .photo-band-img { margin-top: -6vw; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
