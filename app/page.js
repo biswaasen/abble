@@ -26,14 +26,14 @@ export default function Home() {
           <Showcase />
         </section>
 
-        <section id="wear" className="sec">
-          <div className="wrap center">
-            <h2 className="h2">Pocket it. Or snap it on.</h2>
-          </div>
-          <div className="pair">
-            <img className="rv" src="/img/hand.webp" width={1199} height={1312} loading="lazy" alt="Abble 1 held between thumb and fingers" />
-            <img className="rv" src="/img/wrist.webp" width={1536} height={1024} loading="lazy" alt="Abble 1 worn on a black woven strap" />
-          </div>
+        <section id="wear" className="sec center">
+          <h2 className="h2">Pocket it.</h2>
+          <img className="shot shot-hand rv" src="/img/hand.webp" width={1199} height={1312} loading="lazy" alt="Abble 1 held between thumb and fingers" />
+        </section>
+
+        <section className="sec center bleed">
+          <h2 className="h2">Or snap it on.</h2>
+          <img className="shot shot-wrist rv" src="/img/wrist.webp" width={1535} height={1024} loading="lazy" alt="Abble 1 worn on a black woven strap" />
         </section>
 
         <section id="faq" className="sec">
