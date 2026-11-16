@@ -8,3 +8,6 @@ out
 npm-debug.log*
 
 apps-script/*.local.gs
+
+# local Claude Code settings and previews
+.claude/

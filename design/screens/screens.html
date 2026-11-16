@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Abble 1 screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=block">
+<style>
+  /* Source of the four 3D device screens (story order: home, ask, talk, done).
+     To update them: edit below, open this file in Chrome, capture each .screen at device scale 4
+     (4096 × 3000), save as webp to public/screens/4k/<id>.webp and a 2048 × 1500 copy to public/screens/<id>.webp.
+
+     One grid for every screen (1024 × 750):
+     64 margins · status bar row 32–72 · chip at 128 · headline at 208 · bottom edge 686 */
+  :root { --m: 64px; }
+  html, body { margin: 0; background: transparent; }
+  body { font-family: 'Inter', sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+  .screen {
+    position: relative; width: 1024px; height: 750px; margin-bottom: 40px; overflow: hidden;
+    border-radius: 72px;
+    background: linear-gradient(180deg, #066be9 0%, #3a93fb 40%, #74bafc 75%, #a2d4fd 100%);
+  }
+
+  .status { position: absolute; top: 32px; left: var(--m); right: var(--m); height: 40px; display: flex; align-items: center; }
+  .status .time { font-size: 34px; font-weight: 500; letter-spacing: -0.01em; }
+  .status .icons { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+
+  .chip { position: absolute; top: 128px; left: var(--m); height: 52px; display: flex; align-items: center; gap: 16px; }
+  .badge { width: 52px; height: 52px; border-radius: 12px; background: #fff; box-shadow: 0 2px 10px rgba(0, 30, 90, 0.18); display: grid; place-items: center; }
+  .badge img { width: 33px; height: 33px; }
+  .chip p { margin: 0; font-size: 48px; font-weight: 400; line-height: 1; }
+  .chip b { font-weight: 500; }
+
+  .copy { position: absolute; top: 208px; left: var(--m); width: 896px; }
+  .copy h1 { margin: 0; font-size: 96px; font-weight: 300; line-height: 1.06; letter-spacing: -0.03em; }
+  
+
+  .choices { position: absolute; left: var(--m); right: var(--m); bottom: var(--m); display: flex; gap: 24px; }
+  .choices span {
+    flex: 1; height: 112px; border-radius: 56px; box-sizing: border-box; display: grid; place-items: center;
+    font-size: 44px; font-weight: 500;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.14) 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  /* mic sits on the same midline as the buttons (686 - 56 = 630) */
+  .mic { position: absolute; left: 512px; top: 630px; width: 0; height: 0; }
+  .mic i { position: absolute; border-radius: 50%; box-sizing: border-box; transform: translate(-50%, -50%); }
+  .mic .outer { width: 146px; height: 146px; border: 2px solid rgba(255, 255, 255, 0.18); }
+  .mic .inner { width: 114px; height: 114px; border: 2px solid rgba(255, 255, 255, 0.4); }
+  .mic svg { position: absolute; transform: translate(-50%, -50%); }
+
+  /* agent row: four 128 tiles on the 64 margins, 128 apart */
+  .agents { position: absolute; left: var(--m); right: var(--m); bottom: var(--m); display: flex; justify-content: space-between; }
+  .agent { width: 128px; text-align: center; }
+  .tile { width: 128px; height: 128px; border-radius: 29px; background: #fff; overflow: hidden; display: grid; place-items: center; box-shadow: 0 5px 18px rgba(0, 30, 90, 0.18); }
+  .tile img { width: 128px; height: 128px; display: block; }
+  .tile img.inset { width: 83px; height: 83px; }
+  .agent p { margin: 12px 0 0; font-size: 26px; line-height: 1.2; }
+</style>
+</head>
+<body>
+<template id="status">
+  <div class="status">
+    <span class="time">9:41</span>
+    <span class="icons">
+      <svg width="34" height="26" viewBox="0 0 34 26" aria-hidden="true"><circle cx="17" cy="22" r="3.2" fill="#fff"/><path d="M8.5 15.5a12 12 0 0 1 17 0" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><path d="M2.5 9.5a20.5 20.5 0 0 1 29 0" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/></svg>
+      <svg width="52" height="26" viewBox="0 0 52 26" aria-hidden="true"><rect x="1.5" y="1.5" width="44" height="23" rx="7" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2.5"/><rect x="5.5" y="5.5" width="32" height="15" rx="4" fill="#fff"/><rect x="48" y="9" width="3" height="8" rx="1.5" fill="rgba(255,255,255,0.55)"/></svg>
+    </span>
+  </div>
+</template>
+<template id="agents">
+  <div class="agents">
+    <div class="agent"><div class="tile"><img src="brand/gemini-cli.png" alt=""></div><p>Gemini</p></div>
+    <div class="agent"><div class="tile"><img class="inset" src="brand/claude.png" alt=""></div><p>Claude</p></div>
+    <div class="agent"><div class="tile"><img src="brand/codex.png" alt=""></div><p>Codex</p></div>
+    <div class="agent"><div class="tile"><img src="brand/cursor.png" alt=""></div><p>Cursor</p></div>
+  </div>
+</template>
+
+<section class="screen" id="home">
+  <div class="chip"><span class="badge"><img src="brand/claude.png" alt=""></span><p><b>Claude</b> is waiting</p></div>
+  <div class="copy"><h1>Launch page<br>is ready.</h1></div>
+  <div data-use="agents"></div>
+</section>
+
+<section class="screen" id="ask">
+  <div class="chip"><span class="badge"><img src="brand/claude.png" alt=""></span><p><b>Claude</b> is asking</p></div>
+  <div class="copy"><h1>Ship it today<br>or tomorrow?</h1></div>
+  <div class="choices"><span>Today</span><span>Tomorrow</span></div>
+</section>
+
+<section class="screen" id="talk">
+  <div class="chip"><span class="badge"><img src="brand/claude.png" alt=""></span><p><b>Claude</b> is listening</p></div>
+  <div class="copy"><h1>Today. And email<br>the waitlist at nine.</h1></div>
+  <div class="mic">
+    <i class="outer"></i><i class="inner"></i>
+    <svg width="34" height="46" viewBox="0 0 34 46" aria-hidden="true"><rect x="9.5" y="2" width="15" height="25" rx="7.5" fill="#fff"/><path d="M3.5 21a13.5 13.5 0 0 0 27 0" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><path d="M17 34.5v8" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg>
+  </div>
+</section>
+
+<section class="screen" id="done">
+  <div class="chip"><span class="badge"><img src="brand/claude.png" alt=""></span><p><b>Claude</b> is on it</p></div>
+  <div class="copy"><h1>Shipping today.<br>Waitlist email at nine.</h1></div>
+  <div data-use="agents"></div>
+</section>
+
+<script>
+  document.querySelectorAll('.screen').forEach((s) => s.prepend(document.getElementById('status').content.cloneNode(true)));
+  document.querySelectorAll('[data-use]').forEach((d) => d.replaceWith(document.getElementById(d.dataset.use).content.cloneNode(true)));
+</script>
+</body>
+</html>

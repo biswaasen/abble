@@ -2,7 +2,9 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { LOGO_PATH } from '@/components/Logo';
-// Screen images live in public/screens (2048 × 1500 renders of the device screens), in story order.
+
+// Device screens in story order. Images live in public/screens/4k (4096 × 3000) and public/screens (2048 × 1500, for phones).
+// Their source is design/screens/screens.html.
 export const SCREENS = ['home', 'ask', 'talk', 'done'];
 
 const W = 3.8, H = 2.8, D = 0.4, RAD = 0.3, RB = 0.05, GB = 0.05, INS = 0.035;
@@ -13,7 +15,6 @@ const FIT = 0.92;
 const BLEED = 0.25, K = 1 + 2 * BLEED;
 
 function buildDevice(R) {
-  const V2 = THREE.Vector2;
   const scene = new THREE.Scene();
 
   const pm = new THREE.PMREMGenerator(R);
