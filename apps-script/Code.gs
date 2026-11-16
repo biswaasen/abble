@@ -1,5 +1,5 @@
 const SECRET = 'PASTE_SECRET';
-const TAB = 'Sign-ups';
+const TAB = 'Early list';
 const HEADERS = ['Time', 'Phone', 'Name', 'Company', 'How long agents work alone', 'Country', 'Page', 'Browser'];
 
 function doPost(e) {
