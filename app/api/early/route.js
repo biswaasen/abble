@@ -1,5 +1,3 @@
-// Receives the early-list form and appends one row to the Google Sheet through the Apps Script web app.
-// The Apps Script URL and the shared secret stay on the server (Vercel env vars), never in the browser.
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
@@ -10,9 +8,6 @@ const json = (body, status = 200) => Response.json(body, { status, headers: { 'C
 export async function POST(req) {
   let b;
   try { b = await req.json(); } catch { return json({ ok: false, error: 'Bad request.' }, 400); }
-
-  // Bots fill the hidden field. Pretend it worked and drop it.
-  if (clip(b.website)) return json({ ok: true });
 
   const email = clip(b.email, 200).toLowerCase();
   if (!EMAIL.test(email)) return json({ ok: false, error: 'Please enter a valid email.' }, 400);

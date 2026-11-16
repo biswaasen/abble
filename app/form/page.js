@@ -19,7 +19,7 @@ const STEPS = [
 export default function FormPage() {
   const [answers, setAnswers] = useState({ agents: [] });
   const [i, setI] = useState(0);
-  const [state, setState] = useState('asking'); // asking | sending | done
+  const [state, setState] = useState('asking');
   const [error, setError] = useState('');
   const inputRef = useRef(null);
   const advanceTimer = useRef(0);
@@ -55,7 +55,6 @@ export default function FormPage() {
           hours: a.hours || '',
           away: a.away || '',
           okToCall: a.okToCall === 'Yes',
-          website: '',
           page: window.location.href,
         }),
       });
@@ -110,7 +109,7 @@ export default function FormPage() {
             <a className="product fp-product" href="/">abble 1</a>
             <h1 className="fp-q">You are on the list{answers.name ? `, ${answers.name.split(' ')[0]}` : ''}.</h1>
             <p className="fp-help">Thank you for helping shape abble 1. {answers.okToCall === 'Yes' ? 'We will be in touch about a call.' : 'Early access news comes to your inbox first.'}</p>
-            <img className="fp-done-img" src="/img/06-upright-grip.webp" width={1122} height={1402} alt="" />
+            <img className="fp-done-img" src="/img/hand.webp" width={1122} height={1402} alt="" />
           </div>
         </main>
       </div>
@@ -173,7 +172,7 @@ export default function FormPage() {
 
           <div className="fp-foot">
             {!isText && (s.type === 'multi' || last) ? (
-              <button type="button" className="btn btn-lg fp-go" onClick={() => next()} disabled={state === 'sending' || (last && !value)}>
+              <button type="button" className="btn btn-lg" onClick={() => next()} disabled={state === 'sending' || (last && !value)}>
                 {state === 'sending' ? 'Sending…' : last ? 'Join the first 100' : 'Continue'}
               </button>
             ) : null}

@@ -1,7 +1,6 @@
 'use client';
 import { useEffect } from 'react';
 
-/* Fades and lifts each .rv element once, the first time it scrolls into view. */
 export default function Reveal() {
   useEffect(() => {
     const els = document.querySelectorAll('.rv');

@@ -1,11 +1,3 @@
-/**
- * abble early list → Google Sheet.
- *
- * Paste this into the sheet's Apps Script editor (Extensions › Apps Script),
- * replace PASTE_SECRET with the same value as SHEET_SECRET in Vercel,
- * then Deploy › New deployment › Web app (Execute as: Me, Who has access: Anyone).
- * The website's server sends each sign-up here. The tab and its columns are created on the first sign-up.
- */
 const SECRET = 'PASTE_SECRET';
 const TAB = 'Early list';
 const HEADERS = ['Time', 'Name', 'Email', 'Phone', 'You are a', 'Role and company', 'Agents', 'Hours a day with agents', 'Away from the screen', 'OK to call', 'Country', 'Page', 'Browser'];
@@ -45,12 +37,10 @@ function doPost(e) {
   return reply({ ok: true });
 }
 
-/* Open the web app URL in a browser to check it is live. */
 function doGet() {
   return reply({ ok: true, service: 'abble early list' });
 }
 
-/* Optional: run once from the editor to create the tab and columns before the first sign-up. */
 function setup() {
   tab();
 }
@@ -68,7 +58,6 @@ function tab() {
   return sheet;
 }
 
-/* Stop a sign-up from being read as a formula: text starting with = + - @ is kept as plain text. */
 function safe(v) {
   const s = String(v == null ? '' : v).slice(0, 500);
   return /^[=+\-@]/.test(s) ? "'" + s : s;

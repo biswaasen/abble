@@ -1,6 +1,6 @@
-export default function Footer({ tint = false }) {
+export default function Footer() {
   return (
-    <footer className={`foot${tint ? ' foot-tint' : ''}`}>
+    <footer className="foot">
       <div className="wrap">
         <div className="foot-links">
           <a href="/story">Our story</a>

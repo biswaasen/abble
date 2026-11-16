@@ -1,8 +1,8 @@
 import '@fontsource-variable/google-sans-flex';
 import './globals.css';
 
-const title = 'abble 1 · The ultimate interface for the agentic era';
-const description = 'A glass screen for your AI coding agents, about the size of an SD card. One question, one answer, back to your day. Launching in 2027. Get early access.';
+const title = 'abble';
+const description = 'abble 1 is a glass screen for your AI coding agents, about the size of an SD card. One question, one answer, back to your day. Launching in 2027.';
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://abble.si'),
