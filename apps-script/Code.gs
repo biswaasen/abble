@@ -1,6 +1,6 @@
 const SECRET = 'PASTE_SECRET';
 const TAB = 'Early list';
-const HEADERS = ['Time', 'Phone', 'Name', 'Company', 'How long agents work alone', 'Country', 'Page', 'Browser'];
+const HEADERS = ['Time', 'Phone', 'Name', 'Company', 'Walks away after a prompt', 'Country', 'Page', 'Browser'];
 
 function doPost(e) {
   let body;

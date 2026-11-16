@@ -8,7 +8,7 @@ const STEPS = [
   { key: 'phone', type: 'tel', q: 'What’s the best number to reach you?', placeholder: 'Phone number', autoComplete: 'tel', required: true },
   { key: 'name', type: 'text', q: 'And what should we call you?', placeholder: 'Name', autoComplete: 'name' },
   { key: 'company', type: 'text', q: 'Where do you build?', placeholder: 'Company or project', autoComplete: 'organization' },
-  { key: 'away', type: 'choice', q: 'How long do you leave your agents working on their own?', options: ['A few minutes', 'Up to an hour', 'A few hours', 'Most of the day'] },
+  { key: 'away', type: 'choice', q: 'How often do you walk away after a prompt?', options: ['Rarely', 'Sometimes', 'Often', 'Almost always'] },
 ];
 
 const COUNTRIES = {

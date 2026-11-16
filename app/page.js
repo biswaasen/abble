@@ -32,7 +32,7 @@ export default function Home() {
           </div>
           <div className="pair">
             <img className="rv" src="/img/hand.webp" width={1199} height={1312} loading="lazy" alt="Abble 1 held between thumb and fingers" />
-            <img className="rv" src="/img/wrist.webp" width={1535} height={1024} loading="lazy" alt="Abble 1 worn on a black woven strap" />
+            <img className="rv" src="/img/wrist.webp" width={1536} height={1024} loading="lazy" alt="Abble 1 worn on a black woven strap" />
           </div>
         </section>
 
