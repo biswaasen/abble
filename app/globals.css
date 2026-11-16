@@ -3,7 +3,7 @@
   --grey: #6e6e73;
   --line: rgba(0, 0, 0, 0.08);
   --tile: #f5f5f7;
-  --photo: #f4f3fb;
+  --photo: #fefefe;
   --font: 'Google Sans Flex Variable', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
@@ -29,7 +29,7 @@ a { color: inherit; text-decoration: none; }
 .center { text-align: center; }
 .sec { padding: clamp(112px, 13vw, 190px) 24px 0; }
 
-.product { margin: 0 0 14px; font-size: clamp(24px, 2.5vw, 36px); font-weight: 300; letter-spacing: -0.025em; }
+.product { margin: 0 0 12px; font-size: clamp(21px, 2.2vw, 30px); font-weight: 600; letter-spacing: -0.015em; }
 .h2 { margin: 0; font-size: clamp(40px, 5.6vw, 80px); line-height: 1.02; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
 .fine { margin: 0; font-size: 12px; line-height: 1.5; color: var(--grey); }
 .launch { margin: 18px 0 0; font-size: clamp(22px, 2.2vw, 30px); font-weight: 400; letter-spacing: -0.02em; color: var(--grey); }
@@ -63,7 +63,7 @@ a { color: inherit; text-decoration: none; }
 .navin { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .nav-logo { display: block; color: var(--ink); }
 .nav-logo svg { display: block; width: 30px; height: 30px; }
-.brand { font-size: 24px; font-weight: 300; letter-spacing: -0.03em; color: var(--ink); }
+.brand { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
 .navlinks { display: flex; gap: 30px; font-size: 14px; }
 .navlinks a { color: #424245; transition: color 160ms; }
 .navlinks a:hover { color: var(--ink); }
@@ -116,7 +116,7 @@ a { color: inherit; text-decoration: none; }
 .photo-band-copy { position: relative; z-index: 1; padding: clamp(120px, 14vw, 200px) 24px 0; text-align: center; }
 .photo-band-img {
   --gap: clamp(40px, 5.3vw, 76px);
-  width: 100%; max-width: 1100px; height: auto; margin: calc(var(--gap) - 0.145 * min(100vw, 1100px)) auto 0;
+  width: 100%; max-width: 900px; height: auto; margin: calc(var(--gap) - 0.144 * min(100vw, 900px)) auto 0;
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 84%, transparent), linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   -webkit-mask-composite: source-in;
   mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 84%, transparent), linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
@@ -131,7 +131,7 @@ a { color: inherit; text-decoration: none; }
 .story-end .photo-band-copy { padding-top: clamp(120px, 15vw, 220px); }
 .story-end .photo-band-img { --gap: clamp(48px, 6.3vw, 90px); }
 
-.foot { padding: 32px 24px 56px; background: var(--photo); }
+.foot { padding: 32px 24px 56px; background: var(--photo); border-top: 1px solid var(--line); }
 .foot-links { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 20px; font-size: 14px; }
 .foot-links a { color: #424245; }
 .foot-links a:hover { color: var(--ink); }
@@ -157,6 +157,16 @@ a { color: inherit; text-decoration: none; }
 .fp-input:-webkit-autofill { -webkit-box-shadow: 0 0 0 40px #fff inset; -webkit-text-fill-color: var(--ink); }
 .fp-label { position: absolute; left: 23px; top: 50%; transform: translateY(-50%); font-size: 17px; color: #86868b; pointer-events: none; transition: top 160ms ease, font-size 160ms ease, transform 160ms ease; }
 .fp-input:focus + .fp-label, .fp-input:not(:placeholder-shown) + .fp-label { top: 9px; transform: none; font-size: 12px; }
+.fp-tel .fp-input { padding: 0 60px 0 116px; }
+.fp-tel .fp-label, .fp-tel .fp-input:focus + .fp-label { left: 117px; top: 50%; transform: translateY(-50%); font-size: 17px; }
+.fp-tel .fp-input:not(:placeholder-shown) + .fp-label { opacity: 0; }
+.fp-cc {
+  position: absolute; left: 1px; top: 1px; bottom: 1px; width: 102px; padding: 0 30px 0 18px;
+  appearance: none; -webkit-appearance: none; border: 0; border-right: 1px solid #e8e8ed; border-radius: 28px 0 0 28px;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2386868b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center / 10px 6px;
+  color: var(--ink); font-family: inherit; font-size: 17px; cursor: pointer; outline: none;
+}
+.fp-cc:focus-visible { box-shadow: inset 0 0 0 2px rgba(0, 102, 204, 0.5); }
 .fp-arrow {
   position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
   width: 36px; height: 36px; border-radius: 50%; padding: 0; cursor: pointer;

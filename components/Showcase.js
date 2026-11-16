@@ -103,7 +103,7 @@ export default function Showcase() {
       <span id="how" className="look-anchor" style={{ '--at': INTRO }} aria-hidden="true" />
       <div className="look-stick" ref={stickRef}>
         <div className="show-text" ref={textRef}>
-          <p className="product">abble 1</p>
+          <p className="product">Abble 1</p>
           <h1 className="hero-title">The ultimate interface<br />for the agentic era.</h1>
         </div>
         <div className="show-stage" ref={stageRef}>

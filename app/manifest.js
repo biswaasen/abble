@@ -1,7 +1,7 @@
 export default function manifest() {
   return {
-    name: 'abble',
-    short_name: 'abble',
+    name: 'Abble 1',
+    short_name: 'Abble',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

@@ -119,15 +119,15 @@ export default function FormPage() {
       <div className="fp fp-done">
         <main className="fp-main">
           <div className="fp-step">
-            <a className="fp-mark" href="/" aria-label="abble home"><Logo /></a>
+            <a className="fp-mark" href="/" aria-label="Abble home"><Logo /></a>
             <h1 className="fp-q">You’re on the list{first ? `, ${first}` : ''}.</h1>
             <p className="fp-help">
-              {answers.okToCall === 'Yes' ? 'Thank you for helping shape abble 1. We will call you soon about the design.' : 'Thank you for helping shape abble 1. Early access news comes to your inbox first.'}
+              {answers.okToCall === 'Yes' ? 'Thank you for helping shape Abble 1. We will call you soon about the design.' : 'Thank you for helping shape Abble 1. Early access news comes to your inbox first.'}
             </p>
             <a className="btn btn-lg fp-home" href="/">Back to home</a>
           </div>
         </main>
-        <img className="fp-done-img" src="/img/hero.webp" width={1536} height={1024} alt="abble 1 showing the time and four coding agents" />
+        <img className="fp-done-img" src="/img/hero.webp" width={1535} height={1024} alt="Abble 1 showing the time and four coding agents" />
       </div>
     );
   }
@@ -136,7 +136,7 @@ export default function FormPage() {
     <div className="fp">
       <main className="fp-main">
         <div className="fp-step" key={s.key}>
-          <a className="product fp-product" href="/">abble 1</a>
+          <a className="product fp-product" href="/">Abble 1</a>
           <h1 className="fp-q"><label htmlFor={isText ? `f-${s.key}` : undefined}>{s.q}</label></h1>
 
           {isText ? (

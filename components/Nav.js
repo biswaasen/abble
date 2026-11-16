@@ -5,7 +5,7 @@ export default function Nav() {
   return (
     <header className="nav">
       <nav className="navin" aria-label="Main">
-        <a className="nav-logo" href="/#top" aria-label="abble">
+        <a className="nav-logo" href="/#top" aria-label="Abble">
           <Logo />
         </a>
         <div className="navlinks">

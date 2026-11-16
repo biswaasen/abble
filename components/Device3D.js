@@ -266,7 +266,7 @@ export default function Device3D({ drive, className = '' }) {
 
   return (
     <div ref={stageRef} className={`stage ${className}${ready ? ' ready' : ''}${fallback ? ' fallback' : ''}`}>
-      <img className="poster" src="/img/hero.webp" width={1536} height={1024} alt="abble 1, a small space gray device showing the time and four coding agents" />
+      <img className="poster" src="/img/hero.webp" width={1535} height={1024} alt="Abble 1, a small space gray device showing the time and four coding agents" />
     </div>
   );
 }

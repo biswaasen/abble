@@ -1,6 +1,6 @@
-# abble
+# Abble
 
-Launch site for abble 1. Next.js App Router on Vercel, with a scroll-driven 3D device and an early access form that writes to a Google Sheet.
+Launch site for Abble 1. Next.js App Router on Vercel, with a scroll-driven 3D device and an early access form that writes to a Google Sheet.
 
 ## Run
 
@@ -21,7 +21,7 @@ app/
   globals.css        all styles
 components/
   Showcase.js        pinned hero and scroll story around the 3D device
-  Device3D.js        three.js model of abble 1
+  Device3D.js        three.js model of Abble 1
   screens.js         device screens drawn on canvas
   Nav.js, Footer.js, EarlyButton.js, PhotoBand.js, Reveal.js
 lib/launch.js        launch year

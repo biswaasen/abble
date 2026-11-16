@@ -7,8 +7,8 @@ import PhotoBand from '@/components/PhotoBand';
 import { LAUNCH_YEAR } from '@/lib/launch';
 
 const FAQ = [
-  ['What is abble 1?', 'A glass screen for your AI coding agents, about the size of an SD card. When one needs a decision, abble 1 shows you the question. Tap or speak your answer, and the agent gets back to work.'],
-  ['When does it launch?', `abble 1 launches in ${LAUNCH_YEAR}. Early access members hear first.`],
+  ['What is Abble 1?', 'A glass screen for your AI coding agents, about the size of an SD card. When one needs a decision, Abble 1 shows you the question. Tap or speak your answer, and the agent gets back to work.'],
+  ['When does it launch?', `Abble 1 launches in ${LAUNCH_YEAR}. Early access members hear first.`],
   ['What does early access cost?', 'Nothing. Tell us how you work with agents and we will keep you posted.'],
   ['Which agents will it work with?', 'We are designing around Claude Code, Codex, Cursor and Gemini CLI. These are planned integrations, not finished ones.'],
   ['Do I have to wear it?', 'No. Keep it in a pocket, or snap it onto the optional woven strap.'],
@@ -31,8 +31,8 @@ export default function Home() {
             <h2 className="h2">Pocket it. Or snap it on.</h2>
           </div>
           <div className="pair">
-            <img className="rv" src="/img/hand.webp" width={1199} height={1312} loading="lazy" alt="abble 1 held between thumb and fingers" />
-            <img className="rv" src="/img/wrist.webp" width={1535} height={1024} loading="lazy" alt="abble 1 worn on a black woven strap" />
+            <img className="rv" src="/img/hand.webp" width={1199} height={1312} loading="lazy" alt="Abble 1 held between thumb and fingers" />
+            <img className="rv" src="/img/wrist.webp" width={1535} height={1024} loading="lazy" alt="Abble 1 worn on a black woven strap" />
           </div>
         </section>
 

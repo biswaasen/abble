@@ -29,7 +29,7 @@ export default function Story() {
 
         <section className="story-end">
           <PhotoBand>
-            <h2 className="story-line"><a className="big-link" href="/">Meet abble 1 <span aria-hidden="true">→</span></a></h2>
+            <h2 className="story-line"><a className="big-link" href="/">Meet Abble 1 <span aria-hidden="true">→</span></a></h2>
           </PhotoBand>
         </section>
       </main>

@@ -9,8 +9,8 @@ export default function Footer() {
         </div>
         <p className="fine">Images show a design concept. Size, display and strap may change before production. Agent names and icons belong to their owners and are shown as planned integrations.</p>
         <div className="foot-row">
-          <span className="brand">abble</span>
-          <span className="fine">© 2026 abble</span>
+          <span className="brand">Abble</span>
+          <span className="fine">© 2026 Abble</span>
         </div>
       </div>
     </footer>
