@@ -1,4 +1,4 @@
-import PreorderButton from '@/components/PreorderButton';
+import EarlyAccessButton from '@/components/EarlyAccessButton';
 import Logo from '@/components/Logo';
 
 export default function Nav() {
@@ -13,7 +13,7 @@ export default function Nav() {
           <a href="/#wear">Design</a>
           <a href="/story">Our story</a>
         </div>
-        <PreorderButton size="nav" />
+        <EarlyAccessButton size="nav" />
       </nav>
     </header>
   );

@@ -131,7 +131,7 @@ export default function FormPage() {
           <div className="fp-step">
             <a className="fp-mark" href="/" aria-label="Abble home"><Logo /></a>
             <h1 className="fp-q">You’re in{first ? `, ${first}` : ''}.</h1>
-            <p className="fp-help">Your Abble 1 is reserved at {PRICE}. Pay nothing today. We’ll be in touch before it ships.</p>
+            <p className="fp-help">The {PRICE} launch price is yours. We’ll be in touch before Abble 1 ships.</p>
             <a className="btn btn-lg fp-home" href="/">Back to home</a>
           </div>
         </main>
@@ -144,7 +144,11 @@ export default function FormPage() {
     <div className="fp">
       <main className="fp-main">
         <div className="fp-step" key={s.key}>
-          <a className="product fp-product" href="/">Pre-order Abble 1 · {PRICE}</a>
+          <a className="fp-brand" href="/" aria-label="Abble 1 home">
+            <Logo />
+            <span>Abble 1</span>
+            <span className="fp-price">{PRICE}</span>
+          </a>
           <h1 className="fp-q"><label htmlFor={isText ? `f-${s.key}` : undefined}>{s.q}</label></h1>
 
           {isText ? (
