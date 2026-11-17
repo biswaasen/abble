@@ -131,12 +131,10 @@ a { color: inherit; text-decoration: none; }
 .fp-prev:hover { color: var(--ink); }
 .fp-err { margin: 18px 0 0; font-size: 16px; color: #c4231a; }
 .fp-done { background: linear-gradient(to bottom, #fff 35%, var(--tile) 80%); }
-.fp-done .fp-main { padding: 64px 24px 0; }
 .fp-done .fp-q { font-size: clamp(36px, 4.6vw, 64px); }
 .fp-mark { display: block; margin-bottom: 24px; color: var(--ink); }
 .fp-mark svg { display: block; width: 44px; height: 44px; }
 .fp-home { margin-top: 32px; }
-.fp-done-img { display: block; mix-blend-mode: multiply; width: min(760px, 92vw); height: auto; margin: 0 auto clamp(24px, 6vh, 64px); }
 
 @media (max-width: 980px) {
   .look { height: 640vh; }

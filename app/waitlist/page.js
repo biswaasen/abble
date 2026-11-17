@@ -135,7 +135,6 @@ export default function WaitlistPage() {
             <a className="btn btn-lg fp-home" href="/">Back to home</a>
           </div>
         </main>
-        <img className="fp-done-img" src="/img/abble-1.webp" width={1600} height={700} alt="Abble 1 asking whether to ship it today or tomorrow" />
       </div>
     );
   }
